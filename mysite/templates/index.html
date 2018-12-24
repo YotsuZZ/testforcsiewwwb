@@ -1,0 +1,59 @@
+<!-- index.html -->
+<meta charset="UTF-8" />
+{% extends "base.html" %}
+{% block title %} 資工系二手物交易平台 {% endblock %}
+{% block content %}
+<div class='container'>
+	{{today}}
+{% for message in messages %}
+	<div class='alert alert-{{message.tags}}'>{{ message }}</div>
+		{% endfor %}
+		<div class='row'>
+			<div class='col-md-12'>
+				<div class='panel panel-default'>
+					<div class='panel-heading' align=center>
+						<h3>歡迎光臨資工系二手交易平台</h3>
+						<p> 歡迎使用學校電子信箱或其他方式註冊/登入 方可購買商品(學術專題測試用)</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class='row'>
+				<button class='btn btn-info'>
+					目前是第{{ products.number }}頁</a>
+				</button>
+			{% if products.has_previous %}
+				<button class='btn btn info'>
+					<a href='?p={{ products.previous_page_number }}'> 上一頁</a>
+				</button>
+			{% endif %}
+			{% if products.has_next %}
+				<button class='btn btn-info'>
+					<a href='?p={{ products.next_page_number }}'> 下一頁</a>
+				</button>
+			{% endif %}
+		</div>
+		{% for product in products %}
+			{% cycle "<div class='row'>" "" "" ""  %}
+			<div class='col-xs-3 col-sm-3 col-md-3'>
+				<div class='thumbnail'>
+					<img src='{{product.image}}'>
+					<div class='caption'>
+						<h4><a href='{% url "product-url" product.id %}'>{{product.name}}</a></h4>
+						<p>NT$ {{product.price}}</p>
+						<p>庫存:{{product.stock}}</p>
+						<p>{{product.description}}</p>
+						<button class='btn btn-primary'>放入購物車</button>
+					</div>
+				</div>
+			</div>
+			{% cycle "" "" "" "</div>" %}
+		{% empty %}
+			<div class='row'>
+				<div class='col-sm-12' align='center'>
+					<h3>目前沒有商品</h3>
+				</div>
+			</div>
+		{% endfor %}
+</div>
+{% endblock %}

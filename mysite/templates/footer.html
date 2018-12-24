@@ -1,0 +1,8 @@
+<!-- footer -->
+{% block footer %}
+	{%if now %}
+	<p style=' font-family:微軟正黑體;'>現在時刻:{{ now }}</P>
+	{% else %}
+	<p style=' font-family:微軟正黑體;'><font color="#FF0000" size="6">(免責聲明此網站為學術專題測試用)</font></P>
+	{% endif %}
+{% endblock %}

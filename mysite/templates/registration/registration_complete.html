@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %} 註冊資工系二手物交易平台 {% endblock %}
+{% block content %}
+<div class='container'>
+{% for message in messages %}
+	<div class='alert alert-{{ message.tags}}'>{{ message }}</div>
+{% endfor %}
+<div class='row'>
+	<div class='col-md-12'>
+		<div class='panel panel-default'>
+			<div calss='panel-heading' align=center>
+				<h3>感謝你的註冊</h3>
+				<p>請依照填寫的電子郵件中信箱取得驗證碼啟用帳號</p>
+			</div>
+		</div>
+	</div>
+
+	
+</div>
+</div>
+{% endblock %}
