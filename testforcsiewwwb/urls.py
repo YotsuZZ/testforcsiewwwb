@@ -27,8 +27,11 @@ urlpatterns = [
 	path('userinfo/', views.userinfo,),
 	path('logout/', views.index, name = 'logout'),
 	path('accounts/', include('registration.backends.default.urls')),
-	path('product/', views.product, name='product'),
-	
+	path('cart/', views.cart),
+	path('additem/', views.add_to_cart, name='additem'),
+	path('removeitem/', views.remove_from_cart, name='removeitem'),
+	path('order/', views.index, name = 'order'),
+
 	
 
 ]

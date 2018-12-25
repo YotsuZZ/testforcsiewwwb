@@ -14,6 +14,7 @@ from django.http import HttpResponse
 from django.template import RequestContext
 
 
+
 def index(request, cat_id=0):
 	all_products = None
 	
@@ -40,7 +41,11 @@ def index(request, cat_id=0):
 	except EmptyPage:
 		products = paginator.page(paginator.num_pages)
 		
-	return render(request, 'index.html', locals())
+	template = get_template('order.html')
+	request_context = RequestContext(request)
+	request_context.push(locals())
+	html = template.render(request_context)
+	return HttpResponse(html)
 	
 	if request.user.is_authenticated:
 		username = request.user.username
@@ -130,17 +135,80 @@ def userinfo (request):
 	
 	
 	
-def product(request, product_id):
-
-	try:
-		product = models.Product.objects.get(id=product_id)
-	except:
-		product = None
+	
+@verified_email_required
+def order(request):
+	all_categories = models.Category.objects.all()
+	cart = Cart(requst)
+	if request.method == 'POST':
+		user = User.objects.get(username=request.user.username)
+		new_order = models.Order(user=user)
+		
+		
+		form = forms.OrderForm(request.POST, instance=new_order)
+		if form.is_valid():
+			order = form.save()
+			email_messages = "您的購買物如下：\n"
+			for item in cart:
+				models.OrderItem.objects.create(order=order,
+										product=item.product,
+										price = item.product.price,
+										quantity=item.quantity)
+				email_messages = email_messages + "\n"+\"{},{},{}".format(itme.product, \item.product.price, item.quantity)
+			email_messages = email_messages +\"\n以上總計為{}元\．感謝你的訂購，我們會盡速處理。")
+			send_mail("感謝你的訂購", email_messages',http://locahost:8000/ 感謝您!!! [request.user.email],)
+			send_mail("有人訂購產品", email_messages',['skynet.tw@gmail.com'],)
+			return redirect('/myorders/')
+			
+		else:
+			form =forms.OrderForm()
+			
+	template = get_template('order.html')
+	request_context = RequestContext(request)
+	request_context.push(locals())
+	html = template.render(request_context)
+	return HttpResponse(html)
+	
+	
+def add_to_cart(request, product_id, quantity):
+	product = models.Product.objects.get(id=product_id)
+	cart = Cart(request)
+	cart.add(product, product.price, quantity)
+	return redirect('/')
+	
+	
+def remove_from_cart(request, product_id):
+	product = models.Product.objects.get(id=product_id)
+	cart = Cart(request)
+	cart.remove(product)
+	return redirect('/cart/')
+	
+	
+def cart(request):
+	all_catrgories = models.Category1.objects.all()
+	cart = Cart(request)
+	template = get_template('order.html')
+	request_context = RequestContext(request)
+	request_context.push(locals())
+	html = template.render(request_context)
+	return HttpResponse(html)
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
 	
 
-	return render(request, 'product.html', locals())
-	html = template.render(locals())
-	return HttpResponse(html)
+	
+	
+	
+
 			
 			
 			
